@@ -1,3 +1,3 @@
 # r-EDA
 
-#This is code and text behind school graduation research "Create auxiliary tools for exploratory data analysis".
+#これは，卒業研究“探索的データ解析のための補助ツール作成”用のコードとデータファイルです．
