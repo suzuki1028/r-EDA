@@ -1,48 +1,48 @@
 
 
-##�c�[�����g�p����O��
+##ツールを使用する前に
 
 
-#R version 3.3.2 �ȏ�̎g�p�𐄏����܂�.
-#�{�c�[�����g�p���Ă��������ۂɓ��͂�K�v�Ƃ��镔��������܂�.
-#���p�����Ƀ��b�Z�[�W������̂ł�������Q�Ƃ��Ă�������.
-#���p�����ւ̓��͂͌����Ƃ��Ĉ��p��������Ă��肢���܂�.
-#�f�[�^�t���[����x�N�g��, �֐��̈����ɕ������͂�����̂�����ꍇ�̓J���}�ŋ�؂��Ă�������(��F(dat$a,dat$b)).
+#R version 3.3.2 以上の使用を推奨します.
+#本ツールを使用していただく際に入力を必要とする部分があります.
+#引用符内にメッセージがあるのでそちらを参照してください.
+#引用符内への入力は原則として引用符を取ってお願いします.
+#データフレームやベクトル, 関数の引数に複数個入力するものがある場合はカンマで区切ってください(例：(dat$a,dat$b)).
 
 
-#�����p�[�g-------------------------------------------------------------
+#準備パート-------------------------------------------------------------
 
 
-##�p�b�P�[�W�̏���
+##パッケージの準備
 
 
-#-----R�̃o�[�W�����̊m�F-----
+#-----Rのバージョンの確認-----
 
 R.version.string
 
 
-#-----�p�b�P�[�W�̃C���X�g�[��-----
+#-----パッケージのインストール-----
 
 install.packages("rio")
-#�l�X�Ȍ`���̃f�[�^�t�@�C���̓ǂݍ��݁E�����o�����\�ɂ���p�b�P�[�W
+#様々な形式のデータファイルの読み込み・書き出しを可能にするパッケージ
 
 install.packages("plyr")
-#�f�[�^�̕���,�K�p,�����̂��߂̃p�b�P�[�W
+#データの分割,適用,結合のためのパッケージ
 
 install.packages("stargazer")
-#�������t�H�[�}�b�g�ŉ�A���͂̌��ʕ\��LaTeX�R�[�h,HTML�R�[�h,ASCII�e�L�X�g���쐬����p�b�P�[�W
+#整ったフォーマットで回帰分析の結果表のLaTeXコード,HTMLコード,ASCIIテキストを作成するパッケージ
 
 
-#-----�p�b�P�[�W�̌Ăяo��-----
+#-----パッケージの呼び出し-----
 
 library(rio)
 library(plyr)
 library(stargazer)
 library(nnet)
-#���`�d�^�j���[�����l�b�g���[�N�y�ё����ΐ����`���f���̂��߂̃p�b�P�[�W
+#順伝播型ニューラルネットワーク及び多項対数線形モデルのためのパッケージ
 
 
-#�p�b�P�[�W�̊m�F
+#パッケージの確認
 
 search()
 
@@ -52,69 +52,69 @@ search()
 #----------------------------------------------------------
 
 
-##�f�[�^�̓ǂݍ���
+##データの読み込み
 
 
-#-----��ƃf�B���N�g���̊m�F-----
+#-----作業ディレクトリの確認-----
 
 getwd()
 
-#��ƃf�B���N�g���̓f�[�^������ꏊ�ɐݒ肵�Ă�������.
+#作業ディレクトリはデータがある場所に設定してください.
 
 
-#-----��ƃf�B���N�g���̕ύX-----
+#-----作業ディレクトリの変更-----
 
-setwd("�ύX��̃f�B���N�g���������")
-
-
-#-----�f�[�^�̓ǂݍ���-----
-
-dat <- import("�ǂݍ��݂����f�[�^�������", stringsAsFactors = TRUE)
-
-#����ȍ~�f�[�^�̖��O��"dat"�œ��ꂵ�Ă��܂�.
+setwd("変更後のディレクトリ名を入力")
 
 
+#-----データの読み込み-----
+
+dat <- import("読み込みたいデータ名を入力", stringsAsFactors = TRUE)
+
+#これ以降データの名前は"dat"で統一しています.
 
 
-##�f�[�^�Z�b�g�̍쐬
 
 
-#-----�f�[�^���e�̊m�F-----
+##データセットの作成
 
-#�f�[�^�̕\��
+
+#-----データ内容の確認-----
+
+#データの表示
 
 dat
 
-#�������f�[�^���ǂݍ��܂�Ă��邩,�ǂ̕ϐ������͂ɕK�v���m�F���Ă�������.
+#正しくデータが読み込まれているか,どの変数が分析に必要か確認してください.
 
 
-#�f�[�^�̍\�����R���p�N�g�ɕ\��
+#データの構造をコンパクトに表示
 
 str(dat)
 
-#�s���Ɨ�,�����ĕϐ��̌^���\������Ă���̂Ŋm�F���Ă�������.
-#�ϐ��̌^��,
-#numeric:����,integer:����,complex:���f��,factor:�����Ȃ����q,ordered:�����t�����q
-#�ƂȂ�܂�.
+#行数と列数,そして変数の型が表示されているので確認してください.
+#変数の型は,
+#numeric:実数,integer:整数,complex:複素数,factor:順序なし因子,ordered:順序付き因子
+#となります.
 
 
-#�f�[�^���e�̗v��
+#データ内容の要約
 
 summary(dat)
 
-#�e�ϐ��̍ŏ��l�E�ő�l,�����l,���ϒl,�l���ʐ��Ȃǂ��\�������.
+#各変数の最小値・最大値,中央値,平均値,四分位数などが表示される.
 
 
 
 
-##�����l�̏���
+##欠損値の処理
 
 
-#-----�����l�̕ϊ�-----
+#-----欠損値の変換-----
 
-#R�ł͌����l�ɑ΂���NA�Ƃ����_���^�����݂���̂�,
-#�f�[�^���̌����l�\�����قȂ�ꍇ(99��.�Ȃ�)�͕ϊ����Ă�������.
-#�s���I�h���̋L���╶����̏ꍇ�͈��p�����ł��肢���܂�.
+#Rでは欠損値に対してNAという論理型が存在するので,
+#データ内の欠損値表示が異なる場合(99や.など)は変換してください.
+#ピリオド等の記号や文字列の場合は引用符つきでお願いします.
 
 
 missingFixer <- function(dataframe, na.values) {
@@ -131,14 +131,14 @@ missingFixer <- function(dataframe, na.values) {
 
 }
 
-missingValues <- c("�����l�����")
+missingValues <- c("欠損値を入力")
 
 dat <- missingFixer(dat, missingValues)
 
 dat
 
 
-#-----�����l���܂ރT���v���̍폜(���X�g���C�Y�@)-----
+#-----欠損値を含むサンプルの削除(リストワイズ法)-----
 
 dat <- na.omit(dat)
 
@@ -147,21 +147,21 @@ dat
 
 
 
-##�ϐ��̌^�̕ϊ�
+##変数の型の変換
 
 
-#-----�A���ϐ�����J�e�S���ϐ��ւ̌^�ϊ�-----
+#-----連続変数からカテゴリ変数への型変換-----
 
-ntof <- data.frame("�^�ϊ��������ϐ������")
+ntof <- data.frame("型変換したい変数を入力")
 
 ntof <- lapply(ntof,as.factor)
 
 str(ntof)
 
 
-#-----�J�e�S���ϐ�����A���ϐ��ւ̌^�ϊ�-----
+#-----カテゴリ変数から連続変数への型変換-----
 
-fton <- data.frame("�^�ϊ��������ϐ������")
+fton <- data.frame("型変換したい変数を入力")
 
 fton <- lapply(fton,as.character)
 
@@ -172,17 +172,17 @@ str(fton)
 
 
 
-##�ϐ��̉��H
+##変数の加工
 
 
-#-----�ϐ��̍���(�����̘A���ϐ��̕��ς��Ƃ�ϐ��̍쐬)-----
+#-----変数の合成(複数の連続変数の平均をとる変数の作成)-----
 
-"�V�����ϐ��������" <- (dat$"�ϐ��������" + dat$"�ϐ��������")/2
+"新しい変数名を入力" <- (dat$"変数名を入力" + dat$"変数名を入力")/2
 
-#��Fnew <- (dat$a + dat$b + dat$c)/3
+#例：new <- (dat$a + dat$b + dat$c)/3
 
 
-#-----�����l���Ƃ�ϐ��𔽓]-----
+#-----整数値をとる変数を反転-----
 
 reverser <- function(dataframe){
   
@@ -199,36 +199,36 @@ reverser <- function(dataframe){
 
 }
 
-rev <- data.frame("�ϐ��������")
+rev <- data.frame("変数名を入力")
 
 reverser(rev)
 
 
-#-----�A���ϐ����J�e�S���ϐ��Ƃ��č쐬-----
+#-----連続変数をカテゴリ変数として作成-----
 
-dat$"�ύX�������ϐ��������p���Ȃ��œ���" <- cut(dat$"�ύX�������ϐ��������",breaks = c("���E�ƂȂ鐔�l�����"),
-                                            labels = c("�V�����J�e�S���������p���t���œ���"))
+dat$"変更したい変数名を引用符なしで入力" <- cut(dat$"変更したい変数名を入力",breaks = c("境界となる数値を入力"),
+                                            labels = c("新しいカテゴリ名を引用符付きで入力"))
 
-#��F���E(��؂�)�ƂȂ鐔�l��c(0,3,6,10), �V�����J�e�S������c("A","B","C")�Ƃ����ꍇ,
-#    A(0<=A<=3),B(3<B<=6),C(6<C<=10)�ŃJ�e�S���������.
-
-
-#-----�J�e�S�����e�̕ύX(�J�e�S���ϐ���ʂ̃J�e�S���ϐ��Ƃ��č쐬)-----
-
-oldValues <- c("�ύX�O�̃J�e�S���������p���t���œ���")
-
-newValues <- factor(c("�ύX��̃J�e�S���������p���t���œ���"))
-
-dat$"�ϐ��������" <- newValues[ match(dat$"�ϐ��������", oldValues)]
-
-#��F�ύX�O�̃J�e�S������c("A-c","D-F","G-I"), �ύX��̃J�e�S������c("A-F","A-F","G-I")�Ƃ����ꍇ,
-#    "A-F","G-I"��2�J�e�S���ɂ܂Ƃߒ������.
+#例：境界(区切り)となる数値をc(0,3,6,10), 新しいカテゴリ名をc("A","B","C")とした場合,
+#    A(0<=A<=3),B(3<B<=6),C(6<C<=10)でカテゴリ化される.
 
 
-#-----�J�e�S�����e�̊m�F-----
+#-----カテゴリ内容の変更(カテゴリ変数を別のカテゴリ変数として作成)-----
 
-#�J�e�S���ϐ��̍�����2�ȉ��̕ϐ�����\��
-#�֐��쓮����""�Ƃ����x�����o����g�p���Ă�������.
+oldValues <- c("変更前のカテゴリ名を引用符付きで入力")
+
+newValues <- factor(c("変更後のカテゴリ名を引用符付きで入力"))
+
+dat$"変数名を入力" <- newValues[ match(dat$"変数名を入力", oldValues)]
+
+#例：変更前のカテゴリ名をc("A-c","D-F","G-I"), 変更後のカテゴリ名をc("A-F","A-F","G-I")とした場合,
+#    "A-F","G-I"の2カテゴリにまとめ直される.
+
+
+#-----カテゴリ内容の確認-----
+
+#カテゴリ変数の項数が2以下の変数名を表示
+#関数作動中に""という警告が出たら使用してください.
 
 levelsChecker <- function(dataframe){
   
@@ -249,143 +249,145 @@ levelsChecker <- function(dataframe){
 levelsChecker(dat)
 
 
-#�J�e�S���ϐ����̎g�p���Ȃ��J�e�S�����폜
+#カテゴリ変数内の使用しないカテゴリを削除
 
 dat <- droplevels(dat)
 
-#�f�[�^������ɂ����g���Ȃ��J�e�S�����o�����Ƃ��Ɏg�p���Ă�������.
+#データ処理後にもう使われないカテゴリが出来たときに使用してください.
 
 
 
 
-##�f�[�^�t���[���̍쐬
+##データフレームの作成
 
 
-#-----�f�[�^�t���[���̍쐬-----
+#-----データフレームの作成-----
 
-dat0 <- data.frame("�f�[�^�Z�b�g�Ɋ܂߂����ϐ��������")
+dat0 <- data.frame("データセットに含めたい変数名を入力")
 
 dat0
 
+#これ以降データの名前は"dat0"で統一しています.
 
-#-----�ϐ��̍폜-----
 
-deleterows <- c("�ϐ��̗�ԍ������")
+#-----変数の削除-----
+
+deleterows <- c("変数の列番号を入力")
 
 dat0 <- dat[, -deleterows]
 
 
 
 
-##�ϐ���J�e�S���̃��x���̕ύX
+##変数やカテゴリのラベルの変更
 
 
-#-----�ϐ����̕ύX-----
+#-----変数名の変更-----
 
-#�f�[�^�Z�b�g���̑S�Ă̕ϐ������l�[������
+#データセット内の全ての変数をリネームする
 
-names(dat0) <- c("�V�����ϐ�����S�Ĉ��p���t���œ���")
+names(dat0) <- c("新しい変数名を全て引用符付きで入力")
 
-#�ϐ��̐��Ɠ����������͂��Ă�������(�ϐ�����ύX���Ȃ����̂����͂��Ă�������).
-
-
-#�ꕔ�̕ϐ������l�[������
-
-names(dat0)[names(dat0) == "�ύX�O�̖��O�����p���t���œ���"] <- c("�ύX��̖��O�����p���t���œ���")
-
-#�ʒu�ԍ��ŗ���w�肷�邱�Ƃ��ł��܂�.
-
-names(dat0)["�ʒu�ԍ������"] <- "�ύX��̖��O�����"
+#変数の数と同じだけ入力してください(変数名を変更しないものも入力してください).
 
 
-#-----�J�e�S�����̕ύX-----
+#一部の変数をリネームする
 
-dat0$"�ύX�������ϐ��������" <- revalue(dat0$"�ύX�������ϐ��������"
-                                    , c("�ύX�O�̃J�e�S���������p���t���œ���" = "�ύX��̃J�e�S���������p���t���œ���"))
+names(dat0)[names(dat0) == "変更前の名前を引用符付きで入力"] <- c("変更後の名前を引用符付きで入力")
+
+#位置番号で列を指定することもできます.
+
+names(dat0)["位置番号を入力"] <- "変更後の名前を入力"
 
 
-#-----�ϐ����݂̂ł̕ϐ��̌Ăяo���Ƃ��̉���-----
+#-----カテゴリ名の変更-----
+
+dat0$"変更したい変数名を入力" <- revalue(dat0$"変更したい変数名を入力"
+                                    , c("変更前のカテゴリ名を引用符付きで入力" = "変更後のカテゴリ名を引用符付きで入力"))
+
+
+#-----変数名のみでの変数の呼び出しとその解除-----
 
 attach(dat0)
 
 detach(dat0)
 
-#�f�[�^�̓��e���X�V�����ꍇ��detach()���Ă���attach()����.
+#データの内容を更新した場合はdetach()してからattach()する.
 
 
 
 
 
-#��̓c�[��----------------------------------------------------------
+#解析ツール----------------------------------------------------------
 
-##��̓c�[�����g�p����ۂ̒���
+##解析ツールを使用する際の注意
 
 
-#�f�t�H���g�ł�stargazer�̏o�͂�Console�ɂ��ꂢ�ɕ\�������悤�ɂȂ��Ă��܂�(type="text").
-#������,type="html"��HTML�̌`��,type�ɂ��ĉ������͂��Ȃ����LaTeX�̃R�[�h�̌`��
-#�o�͂����̂ŕK�v�ɉ����ĕύX���Ă�������.
+#デフォルトではstargazerの出力はConsoleにきれいに表示されるようになっています(type="text").
+#ただし,type="html"でHTMLの形で,typeについて何も入力しなければLaTeXのコードの形で
+#出力されるので必要に応じて変更してください.
 
-#���͂ɂ����ăJ�e�S���ϐ��͑S��,�ŏ��̃J�e�S������J�e�S���Ƃ��Ĉ����܂�.
+#分析においてカテゴリ変数は全て,最初のカテゴリが基準カテゴリとして扱われます.
 
 #----------------------------------------------------------
 
-##�ȉ�,��̓c�[���̃R�[�h�ł�.
+##以下,解析ツールのコードです.
 
 
 
-variables <- c("�ϐ��������p���t���œ���")    #������ϐ��Ƃ��Ĉ���Ȃ��ϐ��̎w��
+variables <- c("変数名を引用符付きで入力")    #被説明変数として扱わない変数の指定
 
 
 
 
 analyzer <- function(vector, dataframe){
   
-  n <- length(dataframe)    #data.frame���̕ϐ��̌����擾
+  n <- length(dataframe)    #data.frame内の変数の個数を取得
   
-  no.col <- 1:n    #���[�e�[�V�����p�x�N�g��
+  no.col <- 1:n    #ローテーション用ベクトル
   
-  n1 <- n-1    #���[�v�G���h�p
+  n1 <- n-1    #ループエンド用
   
-  stargazer(dataframe, type = "text")    #�L�q���v��stargazer�ŕ\��
+  stargazer(dataframe, type = "text")    #記述統計をstargazerで表示
   
   for(i in 0:n1){
     
     k = i+1
     
-    length0 = length(levels(dataframe[,k]))�@  #(factor�^��)�ϐ��̍������擾
+    length0 = length(levels(dataframe[,k]))　  #(factor型の)変数の項数を取得
     
     x <- no.col[1]
     
     no.col[1] <- no.col[i+1]
     
-    no.col[i+1] <- x    #�x�N�g����rotate
+    no.col[i+1] <- x    #ベクトルのrotate
     
-    dataframe0 <- dataframe[,no.col]    #�f�[�^�t���[�����rotate
+    dataframe0 <- dataframe[,no.col]    #データフレーム列のrotate
     
     variable = names(dataframe0)
     
-    xnam = variable[2:n]    #�����ϐ��̃��x��
+    xnam = variable[2:n]    #説明変数のラベル
     
-    ynam = variable[1]    #������ϐ��̃��x��
+    ynam = variable[1]    #被説明変数のラベル
     
-    if(is.na(match(ynam,vector))){    #vector���ɓ��͂��ꂽ�ϐ��̏��O
+    if(is.na(match(ynam,vector))){    #vector中に入力された変数の除外
       
-      model = as.formula(paste(paste(ynam,"~") , paste(xnam, collapse= "+")))    #��A��formula�̋L�q
+      model = as.formula(paste(paste(ynam,"~") , paste(xnam, collapse= "+")))    #回帰式formulaの記述
       
-      if (is.factor(dataframe[,k])){    #�ϐ��̌^��factor�^���ǂ����ŏ�������
+      if (is.factor(dataframe[,k])){    #変数の型がfactor型かどうかで条件分岐
         
-        if (length0 == 2){    #�������񍀂��ǂ����ŏ�������
+        if (length0 == 2){    #項数が二項かどうかで条件分岐
           
-          out0 = glm(model, data = dataframe0, binomial)    #�񍀃��W�X�e�B�b�N��A
+          out0 = glm(model, data = dataframe0, binomial)    #二項ロジスティック回帰
           
-          out1 <- step(out0, trace = 0)    #AIC��Ń��f���I��
+          out1 <- step(out0, trace = 0)    #AIC基準でモデル選択
           
           print(paste(paste("Outcome is", ynam) 
-                      , paste("(Applying glm)")))    #������ϐ��ƓK�p���f���֐��̕\��
+                      , paste("(Applying glm)")))    #被説明変数と適用モデル関数の表示
           
-        } else {    #�������O���ȏ�̏ꍇ
+        } else {    #項数が三項以上の場合
           
-          out1 = multinom(model, data = dataframe0, MaxNWts = 10000)    #�������W�X�e�B�b�N��A
+          out1 = multinom(model, data = dataframe0, MaxNWts = 10000)    #多項ロジスティック回帰
           
           print(paste(paste("Outcome is", ynam) 
                       , paste("(Applying multinom)")))
@@ -394,16 +396,16 @@ analyzer <- function(vector, dataframe){
         
       } else {
         
-        out0 = lm(model, data = dataframe0)    #���`��A
+        out0 = lm(model, data = dataframe0)    #線形回帰
         
-        out1 <- step(out0, trace = 0)    #AIC��Ń��f���I��
+        out1 <- step(out0, trace = 0)    #AIC基準でモデル選択
         
         print(paste(paste("Outcome is", ynam) 
                     , paste("(Applying lm)")))
         
       }
       
-      stargazer(out1,type = "text", single.row = TRUE)    #���͌��ʂ�stargazer�ŕ\��
+      stargazer(out1,type = "text", single.row = TRUE)    #分析結果をstargazerで表示
       
     } else {}
     
